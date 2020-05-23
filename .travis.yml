@@ -1,0 +1,22 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t froylandcito/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true froylandcito/react-test npm test
+
+after_success:
+  - docker build -t froylandcito/complex-client ./client
+  - docker build -t froylandcito/complex-nginx ./nginx
+  - docker build -t froylandcito/complex-server ./server
+  - docker build -t froylandcito/complex-worker ./worker
+
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push froylandcito/complex-client
+  - docker push froylandcito/complex-nginx
+  - docker push froylandcito/complex-server
+  - docker push froylandcito/complex-worker
