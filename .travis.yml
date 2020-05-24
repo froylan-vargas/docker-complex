@@ -20,3 +20,16 @@ after_success:
   - docker push froylandcito/complex-nginx
   - docker push froylandcito/complex-server
   - docker push froylandcito/complex-worker
+
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: "us-east-2"
+  app: "fvgworld-complex"
+  env: "FvgworldComplex-env"
+  bucket_name: "elasticbeanstalk-us-east-2-183542197216"
+  bucket_path: "fvgworld-complex"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
